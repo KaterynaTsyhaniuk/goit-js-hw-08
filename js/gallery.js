@@ -72,8 +72,8 @@ const galleryItem = images
       `<li class="gallery-item">
     <a class="gallery-link" href="${image.original}">
     <img class="gallery-image" src="${image.preview}"  
-    data-source="${image.original} 
-    alt="${image.description}/>
+    data-source="${image.original}" 
+    alt="${image.description}"/>
     </a>
     </li>`
   )
@@ -82,16 +82,19 @@ gallery.insertAdjacentHTML('afterbegin', galleryItem);
 
 // console.log(galleryItem);
 
-//додаємо обробника події на ul.gallery (делегуємо)
 gallery.addEventListener('click', event => {
-  //перевіряємо чи клік бувна елементі з класом gallery-link
+  event.preventDefault();
+
   const galleryLink = event.target.closest('.gallery-link');
-  if (galleryLink) {
-    event.preventDefault(); //запобігаємо переходу за посиланням
-    // отримуємо посилання на велике зображення при кліку на нього)
-    const largeImageSrc = galleryLink
-      .querySelector('.gallery-image')
-      .getAttribute('data-source');
-    console.log(largeImageSrc);
-  }
+  if (!galleryLink) return;
+
+  const largeImageSrc = event.target.dataset.source;
+  console.log(largeImageSrc);
+
+  // console.log('largeImageSrc:', largeImageSrc);
+
+  const instance = basicLightbox.create(
+    `<img src="${largeImageSrc}" width="800" height="600">`
+  );
+  instance.show();
 });
